@@ -1,5 +1,5 @@
 "use client"
-import { FunctionComponent, ReactElement, useState } from 'react';
+import React, { FunctionComponent, ReactElement, useState } from 'react';
 
 interface MessageInputProps {
   onSend: (message: string) => void;
@@ -7,6 +7,13 @@ interface MessageInputProps {
 
 const MessageInput: FunctionComponent<MessageInputProps> = ({ onSend }): ReactElement => {
   const [message, setMessage] = useState('');
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSend();
+    }
+  }
 
   const handleSend = () => {
     if (message.trim()) {
@@ -21,6 +28,7 @@ const MessageInput: FunctionComponent<MessageInputProps> = ({ onSend }): ReactEl
         type="text"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={handleKeyDown}
         className="flex-1 p-2 border rounded-lg outline-none"
         placeholder="Type a message..."
       />

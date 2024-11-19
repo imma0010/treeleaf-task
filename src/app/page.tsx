@@ -67,6 +67,13 @@ const Home = (): ReactElement => {
     }
   }, [dispatch, status, page]);
 
+  // Trigger scroll to bottom when messages are updated
+  useEffect(() => {
+    if (isScrolledToBottom) {
+      scrollToBottom();
+    }
+  }, [messages, isScrolledToBottom]);
+
   // Scroll to bottom
   const scrollToBottom = () => {
     scrollContainerRef.current?.scrollTo({
@@ -77,14 +84,22 @@ const Home = (): ReactElement => {
 
   // Handle sending a new message
   const handleSendMessage = (message: string) => {
+    const generateOddId = () => {
+      const id = Date.now(); // Generate a unique ID
+      return id % 2 === 0 ? id + 1 : id; // Ensure the ID is always odd
+    };
     dispatch(
       addMessage({
-        id: Date.now(), // Unique ID
-        text: message,
-        sender: "me", // Outgoing message
+        id: generateOddId(), // Unique ID
+        // text: message,
+        // sender: "me", // Outgoing message
+        name: message,
+        email: "",
+        gender: "",
+        status: "",
       })
     );
-    scrollToBottom(); // Automatically scroll to the bottom
+    // scrollToBottom(); // Automatically scroll to the bottom
   };
 
   const handleScroll = () => {
